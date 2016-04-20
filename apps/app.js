@@ -20,15 +20,16 @@ $(function() {
 
 function showResults(results){
 	console.log('show');
-	var html;
+	var html='';
 	$.each(results, function(index, value){
     	
 		var result = results[index];
 		var position = index+1;
-    	var title = result.snippet.title + '<img src="'+result.snippet.thumbnails.medium.url+'" />';
-    	var thumb = '';
-	    
-	    html += '<div class="result"><h3>'+ position +'. '+title+'</h3><p>'+result.snippet.description+'<br>'+ position +'</p></div>';
+		var url = 'https://www.youtube.com/watch?v='+result.id.videoId;
+    	var title = result.snippet.title;
+    	var thumb = '<a href="'+url+'""><div class="thumb" style="background-image: url('+result.snippet.thumbnails.high.url+')"></div></a>';
+  
+	    html += '<div class="result"><h3>'+ position +'. '+title+'</h3>'+thumb+'<p>'+result.snippet.description+'<br>'+ position +'</p></div>';
 		$('#search-results').html(html).hide().fadeIn(500);
 
 

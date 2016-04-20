@@ -2,3 +2,9 @@ img {
 	height: 100px;
 	clip: rect(0px, 140px, 140px, 0px);
 }
+
+.thumb {
+	width: 200px;
+	height: 200px;
+	background-position: 50%;
+}
