@@ -25,9 +25,15 @@ function showResults(results){
     	
 		var result = results[index];
 		var position = index+1;
-		var url = 'https://www.youtube.com/watch?v='+result.id.videoId;
+		if (result.id.kind == 'youtube#channel'){
+			var url = 'https://www.youtube.com/channel/'+result.id.channelId;
+		}
+		else {
+			var url = 'https://www.youtube.com/watch?v='+result.id.videoId;
+		}
+
     	var title = result.snippet.title;
-    	var thumb = '<a href="'+url+'""><div class="thumb" style="background-image: url('+result.snippet.thumbnails.high.url+')"></div></a>';
+    	var thumb = '<a href="'+url+'" target="_blank"><div class="thumb" style="background-image: url('+result.snippet.thumbnails.high.url+')"></div></a>';
   
 	    html += '<div class="result"><h3>'+ position +'. '+title+'</h3>'+thumb+'<p>'+result.snippet.description+'<br>'+ position +'</p></div>';
 		$('#search-results').html(html).hide().fadeIn(500);
