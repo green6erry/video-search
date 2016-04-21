@@ -1,26 +1,33 @@
 
-
+var nextPageToken, prevPageToken;
+$('#controls').hide();
 
 function clearEntry(){
 	$('#user-input').val('').focus();
 }
 
-$(function() {
-	console.log('start');
-	clearEntry();
-	$('#search-form').submit(function(event){
-		event.preventDefault();
-		var searchTerm = $('#user-input').val();
-		getRequest(searchTerm);
-	});
+function entryList (newEntry){
+	var allHtml;
+	allHtml += newEntry+'<hr>';
+	$('#search-results').prepend(allHtml);
+	nextPageToken = newEntry.result.nextPageToken;
+	prevPageToken = newEntry.result.prevPageToken;
+	$('#controls').fadeIn(1000);
+	
+}
 
+function nextPage() {
+  requestVideoPlaylist(playlistId, nextPageToken);
+}
 
-
-
+// Retrieve the previous page of videos in the playlist.
+function previousPage() {
+  requestVideoPlaylist(playlistId, prevPageToken);
+}
 
 function showResults(results){
 	console.log('show');
-	var html='';
+	var html=' ';
 	$.each(results, function(index, value){
     	
 		var result = results[index];
@@ -36,11 +43,13 @@ function showResults(results){
     	var thumb = '<a href="'+url+'" target="_blank"><div class="thumb" style="background-image: url('+result.snippet.thumbnails.high.url+')"></div></a>';
   
 	    html += '<div class="result"><h3>'+ position +'. '+title+'</h3>'+thumb+'<p>'+result.snippet.description+'<br>'+ position +'</p></div>';
-		$('#search-results').html(html).hide().fadeIn(500);
+		
 
 
 	});
+	entryList(html);
 	clearEntry();
+
 }
 
 
@@ -53,6 +62,8 @@ function getRequest(searchTerm) {
 		q: searchTerm,
 		part: 'snippet',
 		order: 'viewCount',
+		startIndex: 1,
+		pagetoken: 'CAoQAA',
 		maxResults: 10,
 		key: 'AIzaSyA5KnfmKw5qQc6iFwxuLlXw2lgd5ydWb8M'
 
@@ -60,9 +71,22 @@ function getRequest(searchTerm) {
 	url = 'https://www.googleapis.com/youtube/v3/search';
 
 	$.getJSON(url, params, function(data){
+
 		showResults(data.items);
 		});
 }
+
+$(function() {
+	console.log('start');
+	clearEntry();
+	$('#search-form').submit(function(event){
+		event.preventDefault();
+		var searchTerm = $('#user-input').val();
+		getRequest(searchTerm);
+	});
+
+
+
 
 $('#reset').click(event, function(){
 	event.preventDefault();
